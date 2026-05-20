@@ -5,10 +5,12 @@ import express, {
 } from "express";
 import logger from "./middleware/logger";
 import { globalErrorHandler } from "./middleware/globalErrorHandler";
+import { authRoutes } from "./modules/auth/auth.route";
 
 const app: Application = express();
 
-app.use(globalErrorHandler);
+app.use(express.json());
+
 app.use(logger);
 
 app.get("/", (req: Request, res: Response) => {
@@ -17,5 +19,9 @@ app.get("/", (req: Request, res: Response) => {
     author: "Abdullah Mamun",
   });
 });
+
+app.use("/api/auth", authRoutes);
+
+app.use(globalErrorHandler);
 
 export default app;
