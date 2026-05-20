@@ -3,8 +3,13 @@ import express, {
   type Request,
   type Response,
 } from "express";
+import logger from "./middleware/logger";
+import { globalErrorHandler } from "./middleware/globalErrorHandler";
 
 const app: Application = express();
+
+app.use(globalErrorHandler);
+app.use(logger);
 
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({
