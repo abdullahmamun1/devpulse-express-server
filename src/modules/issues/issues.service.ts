@@ -25,8 +25,27 @@ const getAllIssuesfromDB = async (query: IIssueQuery) => {
 
   return result;
 };
+const getSingleIssuefromDB = async (id: string) => {
+  const result = await sql`
+  SELECT * FROM issues
+    WHERE id = ${id}
+  `;
+
+  return result[0];
+};
+const deleteIssueFromDB = async (id: string) => {
+  const result = await sql`
+  DELETE FROM issues
+    WHERE id = ${id}
+    RETURNING *
+  `;
+
+  return result[0];
+};
 
 export const issueServices = {
   createIssueintoDB,
   getAllIssuesfromDB,
+  getSingleIssuefromDB,
+  deleteIssueFromDB,
 };
