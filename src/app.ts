@@ -6,6 +6,7 @@ import express, {
 import logger from "./middleware/logger";
 import { globalErrorHandler } from "./middleware/globalErrorHandler";
 import { authRoutes } from "./modules/auth/auth.route";
+import { issueRoutes } from "./modules/issues/issues.route";
 
 const app: Application = express();
 
@@ -21,6 +22,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/issues", issueRoutes);
 
 app.use(globalErrorHandler);
 
