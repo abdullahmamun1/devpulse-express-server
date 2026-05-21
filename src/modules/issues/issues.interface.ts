@@ -11,6 +11,12 @@ export interface IIssueInput {
   reporter_id: string;
 }
 
+export interface IIssueQuery {
+  status?: Status;
+  type?: Type;
+  sort?: "newest" | "oldest";
+}
+
 // export interface IIssue {
 //   title: string;
 //   description: string;

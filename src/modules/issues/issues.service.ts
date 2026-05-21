@@ -1,7 +1,7 @@
 import { sql } from "../../db";
-import type { IIssueInput } from "./issues.interface";
+import type { IIssueInput, IIssueQuery } from "./issues.interface";
 
-const createIssue = async (issue: IIssueInput) => {
+const createIssueintoDB = async (issue: IIssueInput) => {
   const { title, description, type, reporter_id } = issue;
   const result = await sql`
   INSERT INTO issues (title, description, type, reporter_id)
@@ -11,7 +11,22 @@ const createIssue = async (issue: IIssueInput) => {
 
   return result[0];
 };
+const getAllIssuesfromDB = async (query: IIssueQuery) => {
+  const { status, type, sort = "newest" } = query;
+
+  const sortOrder = sort === "oldest" ? sql`ASC` : sql`DESC`;
+  const result = await sql`
+  SELECT * FROM issues
+    WHERE ${status ? sql`status = ${status}` : sql`TRUE`}
+          AND
+          ${type ? sql`type=${type}` : sql`TRUE`}
+    ORDER BY created_at ${sortOrder}
+  `;
+
+  return result;
+};
 
 export const issueServices = {
-  createIssue,
+  createIssueintoDB,
+  getAllIssuesfromDB,
 };

@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { issueServices } from "./issues.service";
 import sendResponse from "../../utils/sendResponse";
+import type { Status, Type } from "./issues.interface";
 const createIssue = async (req: Request, res: Response) => {
   if (!req.user) {
     return sendResponse(res, {
@@ -9,7 +10,7 @@ const createIssue = async (req: Request, res: Response) => {
       message: "Unauthorized!!",
     });
   }
-  const issue = await issueServices.createIssue({
+  const issue = await issueServices.createIssueintoDB({
     ...req.body,
     reporter_id: req.user.id,
   });
@@ -27,7 +28,20 @@ const createIssue = async (req: Request, res: Response) => {
     data: issue,
   });
 };
-const getAllIssues = async (req: Request, res: Response) => {};
+const getAllIssues = async (req: Request, res: Response) => {
+  const { status, type, sort = "newest" } = req.query;
+  const issues = await issueServices.getAllIssuesfromDB({
+    status: status as Status,
+    type: type as Type,
+    sort: sort as "newest" | "oldest",
+  });
+  return sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Issues fetched successfully",
+    data: issues,
+  });
+};
 const getSingleIssues = async (req: Request, res: Response) => {};
 const updateIssue = async (req: Request, res: Response) => {};
 const deleteIssue = async (req: Request, res: Response) => {};
