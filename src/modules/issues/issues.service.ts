@@ -77,7 +77,6 @@ const updateIssueinDB = async (
     WHERE id = ${id}
   `;
   const issue = result[0] as IIssue | undefined;
-  console.log(issue);
   if (!issue) {
     return null;
   }
