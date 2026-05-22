@@ -14,11 +14,7 @@ const app: Application = express();
 app.use(express.json());
 
 app.use(logger);
-app.use(
-  cors({
-    origin: ["http://localhost:3000", "https://your-frontend.vercel.app"],
-  }),
-);
+app.use(cors());
 
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({

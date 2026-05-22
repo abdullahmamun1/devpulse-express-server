@@ -11,7 +11,7 @@ const createUser = async (user: IUserInput) => {
   RETURNING id, name, email, role, created_at, updated_at
   `;
 
-  return result[0] as Omit<IUserDB, "password">;
+  return result[0] as Omit<IUserDB, "password"> | undefined;
 };
 const validateUser = async (payload: ILoginInput) => {
   const { email, password } = payload;

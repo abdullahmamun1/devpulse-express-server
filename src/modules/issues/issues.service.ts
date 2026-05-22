@@ -1,4 +1,5 @@
 import { sql } from "../../db";
+import type { Role } from "../auth/auth.interface";
 import type {
   IIssue,
   IIssueInput,
@@ -69,7 +70,7 @@ const updateIssueinDB = async (
   id: string,
   payload: Partial<IIssueUpdate>,
   requesterId: number,
-  requesterRole: string,
+  requesterRole: Role,
 ) => {
   const result = await sql`
   SELECT * FROM issues
@@ -101,7 +102,7 @@ const updateIssueinDB = async (
   WHERE id = ${id}
   RETURNING *
   `;
-  return updated[0];
+  return updated[0] as IIssue | undefined;
 };
 const deleteIssueFromDB = async (id: string) => {
   const result = await sql`

@@ -1,9 +1,13 @@
 import type { NextFunction, Request, Response } from "express";
 import sendResponse from "../utils/sendResponse";
-import jwt, { type JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import config from "../config";
 import { sql } from "../db";
-import type { IJwtPayload, Role } from "../modules/auth/auth.interface";
+import type {
+  IJwtPayload,
+  IUserDB,
+  Role,
+} from "../modules/auth/auth.interface";
 
 const auth = (...roles: Role[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -16,12 +20,12 @@ const auth = (...roles: Role[]) => {
           message: "Unauthorized access!!",
         });
       }
-      const decoded = jwt.verify(token, config.access_secret) as JwtPayload;
+      const decoded = jwt.verify(token, config.access_secret) as { id: number };
       const userData = await sql`
       SELECT * from users
       WHERE id = ${decoded.id}
       `;
-      const user = userData[0];
+      const user = userData[0] as IUserDB | undefined;
       if (!user) {
         return sendResponse(res, {
           statusCode: 404,
@@ -37,7 +41,11 @@ const auth = (...roles: Role[]) => {
           message: "Forbidden!!",
         });
       }
-      req.user = user as IJwtPayload;
+      req.user = {
+        id: user.id,
+        name: user.name,
+        role: user.role,
+      } as IJwtPayload;
       next();
     } catch (error) {
       next(error);

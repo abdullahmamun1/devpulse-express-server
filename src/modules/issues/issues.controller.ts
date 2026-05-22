@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { issueServices } from "./issues.service";
 import sendResponse from "../../utils/sendResponse";
-import type { IIssue, Status, Type } from "./issues.interface";
+import type { IIssue, IIssueUpdate, Status, Type } from "./issues.interface";
 const createIssue = async (
   req: Request<
     Record<string, never>,
@@ -38,8 +38,8 @@ const createIssue = async (
 const getAllIssues = async (req: Request, res: Response) => {
   const { status, type, sort = "newest" } = req.query;
   const issues = await issueServices.getAllIssuesfromDB({
-    status: status as Status,
-    type: type as Type,
+    ...(status && { status: status as Status }),
+    ...(type && { type: type as Type }),
     sort: sort as "newest" | "oldest",
   });
   return sendResponse(res, {
@@ -48,10 +48,9 @@ const getAllIssues = async (req: Request, res: Response) => {
     data: issues,
   });
 };
-const getSingleIssues = async (req: Request, res: Response) => {
+const getSingleIssues = async (req: Request<{ id: string }>, res: Response) => {
   const { id } = req.params;
-  const issue = await issueServices.getSingleIssuefromDB(id as string);
-  console.log(issue);
+  const issue = await issueServices.getSingleIssuefromDB(id);
   if (!issue) {
     return sendResponse(res, {
       statusCode: 404,
@@ -66,11 +65,7 @@ const getSingleIssues = async (req: Request, res: Response) => {
   });
 };
 const updateIssue = async (
-  req: Request<
-    { id: string },
-    unknown,
-    Pick<IIssue, "title" | "description" | "type" | "status">
-  >,
+  req: Request<{ id: string }, unknown, Partial<IIssueUpdate>>,
   res: Response,
 ) => {
   if (!req.user) {
@@ -86,7 +81,6 @@ const updateIssue = async (
     req.user.id,
     req.user.role,
   );
-  console.log(issue);
   if (!issue) {
     return sendResponse(res, {
       statusCode: 404,
@@ -101,9 +95,9 @@ const updateIssue = async (
     data: issue,
   });
 };
-const deleteIssue = async (req: Request, res: Response) => {
+const deleteIssue = async (req: Request<{ id: string }>, res: Response) => {
   const { id } = req.params;
-  const result = await issueServices.deleteIssueFromDB(id as string);
+  const result = await issueServices.deleteIssueFromDB(id);
   if (!result) {
     return sendResponse(res, {
       statusCode: 404,
