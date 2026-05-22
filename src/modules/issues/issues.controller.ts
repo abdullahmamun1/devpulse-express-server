@@ -1,8 +1,15 @@
 import type { Request, Response } from "express";
 import { issueServices } from "./issues.service";
 import sendResponse from "../../utils/sendResponse";
-import type { Status, Type } from "./issues.interface";
-const createIssue = async (req: Request, res: Response) => {
+import type { IIssue, Status, Type } from "./issues.interface";
+const createIssue = async (
+  req: Request<
+    Record<string, never>,
+    unknown,
+    Pick<IIssue, "title" | "description" | "type">
+  >,
+  res: Response,
+) => {
   if (!req.user) {
     return sendResponse(res, {
       statusCode: 401,
@@ -38,7 +45,6 @@ const getAllIssues = async (req: Request, res: Response) => {
   return sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "Issues fetched successfully",
     data: issues,
   });
 };
@@ -56,11 +62,45 @@ const getSingleIssues = async (req: Request, res: Response) => {
   return sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "Issue fetched successfully",
     data: issue,
   });
 };
-const updateIssue = async (req: Request, res: Response) => {};
+const updateIssue = async (
+  req: Request<
+    { id: string },
+    unknown,
+    Pick<IIssue, "title" | "description" | "type">
+  >,
+  res: Response,
+) => {
+  if (!req.user) {
+    return sendResponse(res, {
+      statusCode: 401,
+      success: false,
+      message: "Unauthorized!!",
+    });
+  }
+  const issue = await issueServices.updateIssueinDB(
+    req.params.id,
+    req.body,
+    req.user.id,
+    req.user.role,
+  );
+  console.log(issue);
+  if (!issue) {
+    return sendResponse(res, {
+      statusCode: 404,
+      success: false,
+      message: "Issue not found!!",
+    });
+  }
+  return sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Issue updated successfully",
+    data: issue,
+  });
+};
 const deleteIssue = async (req: Request, res: Response) => {
   const { id } = req.params;
   const result = await issueServices.deleteIssueFromDB(id as string);

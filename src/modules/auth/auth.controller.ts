@@ -2,8 +2,12 @@ import type { Request, Response } from "express";
 import { authService } from "./auth.service";
 import sendResponse from "../../utils/sendResponse";
 import signToken from "../../utils/jwt";
+import type { ILoginInput, IUserInput } from "./auth.interface";
 
-const signup = async (req: Request, res: Response) => {
+const signup = async (
+  req: Request<Record<string, never>, unknown, IUserInput>,
+  res: Response,
+) => {
   const user = await authService.createUser(req.body);
   if (!user) {
     return sendResponse(res, {
@@ -19,7 +23,10 @@ const signup = async (req: Request, res: Response) => {
     data: user,
   });
 };
-const login = async (req: Request, res: Response) => {
+const login = async (
+  req: Request<Record<string, never>, unknown, ILoginInput>,
+  res: Response,
+) => {
   const user = await authService.validateUser(req.body);
   if (!user) {
     return sendResponse(res, {
