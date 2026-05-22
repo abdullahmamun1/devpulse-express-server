@@ -1,5 +1,10 @@
 import { sql } from "../../db";
-import type { IIssue, IIssueInput, IIssueQuery } from "./issues.interface";
+import type {
+  IIssue,
+  IIssueInput,
+  IIssueQuery,
+  IIssueUpdate,
+} from "./issues.interface";
 
 const createIssueintoDB = async (issue: IIssueInput) => {
   const { title, description, type, reporter_id } = issue;
@@ -62,7 +67,7 @@ const getSingleIssuefromDB = async (id: string) => {
 };
 const updateIssueinDB = async (
   id: string,
-  payload: Partial<IIssueInput>,
+  payload: Partial<IIssueUpdate>,
   requesterId: number,
   requesterRole: string,
 ) => {
@@ -84,13 +89,14 @@ const updateIssueinDB = async (
     }
   }
 
-  const { title, description, type } = payload;
+  const { title, description, type, status } = payload;
   const updated = await sql`
   UPDATE issues
   SET
     title = COALESCE(${title}, title),
     description = COALESCE(${description}, description),
     type = COALESCE(${type}, type),
+    status = COALESCE(${status}, status),
     updated_at = NOW()
   WHERE id = ${id}
   RETURNING *

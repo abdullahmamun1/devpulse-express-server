@@ -17,6 +17,10 @@ export interface IIssue {
 export type IIssueInput = Pick<IIssue, "title" | "description" | "type"> & {
   reporter_id: number;
 };
+export type IIssueUpdate = Pick<
+  IIssue,
+  "title" | "description" | "type" | "status"
+>;
 
 export interface IIssueQuery {
   status?: Status;

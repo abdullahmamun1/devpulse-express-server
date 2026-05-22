@@ -69,7 +69,7 @@ const updateIssue = async (
   req: Request<
     { id: string },
     unknown,
-    Pick<IIssue, "title" | "description" | "type">
+    Pick<IIssue, "title" | "description" | "type" | "status">
   >,
   res: Response,
 ) => {
