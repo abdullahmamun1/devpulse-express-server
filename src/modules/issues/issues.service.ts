@@ -96,7 +96,7 @@ const updateIssueinDB = async (
     title = COALESCE(${title}, title),
     description = COALESCE(${description}, description),
     type = COALESCE(${type}, type),
-    status = COALESCE(${status}, status),
+    status = COALESCE(${status}, 'in_progress'),
     updated_at = NOW()
   WHERE id = ${id}
   RETURNING *

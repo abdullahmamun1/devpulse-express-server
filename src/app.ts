@@ -4,6 +4,7 @@ import express, {
   type Response,
 } from "express";
 import logger from "./middleware/logger";
+import cors from "cors";
 import { globalErrorHandler } from "./middleware/globalErrorHandler";
 import { authRoutes } from "./modules/auth/auth.route";
 import { issueRoutes } from "./modules/issues/issues.route";
@@ -13,6 +14,11 @@ const app: Application = express();
 app.use(express.json());
 
 app.use(logger);
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "https://your-frontend.vercel.app"],
+  }),
+);
 
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({

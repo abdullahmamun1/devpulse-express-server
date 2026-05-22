@@ -36,17 +36,12 @@ const login = async (
     });
   }
 
-  const { accessToken, refreshToken } = signToken({
+  const { accessToken } = signToken({
     id: user.id,
     name: user.name,
     role: user.role,
   });
 
-  res.cookie("refreshToken", refreshToken, {
-    secure: false,
-    httpOnly: true,
-    sameSite: "lax",
-  });
   return sendResponse(res, {
     statusCode: 200,
     success: true,
