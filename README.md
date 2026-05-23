@@ -21,15 +21,15 @@ A collaborative REST API for software teams to report bugs, suggest features, an
 
 ## Tech Stack
 
-| Technology   | Details                                                 |
-| ------------ | ------------------------------------------------------- |
-| Node.js      | LTS runtime (v24.x or higher)                           |
-| TypeScript   | Latest stable version                                   |
-| Express.js   | Modular router architecture                             |
-| PostgreSQL   | Relational database via native `pg` driver              |
-| Raw SQL      | Direct `pool.query()` calls — no ORMs or query builders |
-| bcrypt       | Password hashing (salt rounds: 8–12)                    |
-| jsonwebtoken | JWT generation and verification                         |
+| Technology   | Details                                                                                   |
+| ------------ | ----------------------------------------------------------------------------------------- |
+| Node.js      | LTS runtime (v24.x or higher)                                                             |
+| TypeScript   | Latest stable version                                                                     |
+| Express.js   | Modular router architecture                                                               |
+| PostgreSQL   | Relational database hosted on Neon                                                        |
+| Raw SQL      | Direct sql tagged template calls via @neondatabase/serverless — no ORMs or query builders |
+| bcrypt       | Password hashing (salt rounds: 8–12)                                                      |
+| jsonwebtoken | JWT generation and verification                                                           |
 
 ---
 
