@@ -52,7 +52,7 @@ const login = async (
     return sendResponse(res, {
       statusCode: 200,
       success: true,
-      message: "User logged in successfully",
+      message: "Login successful",
       data: { token: accessToken, user },
     });
   } catch (error) {

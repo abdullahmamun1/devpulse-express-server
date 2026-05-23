@@ -54,6 +54,7 @@ const getAllIssues = async (
     });
     return sendResponse(res, {
       statusCode: 200,
+      message: "Issues retrived successfully",
       success: true,
       data: issues,
     });
@@ -78,6 +79,7 @@ const getSingleIssues = async (
     }
     return sendResponse(res, {
       statusCode: 200,
+      message: "Issue retrived successfully",
       success: true,
       data: issue,
     });
