@@ -8,8 +8,8 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
     if (err) {
       console.log("Error writing to log file", err);
     }
-    next();
   });
+  next();
 };
 
 export default logger;

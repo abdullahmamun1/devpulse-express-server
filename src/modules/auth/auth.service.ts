@@ -1,6 +1,6 @@
 import { sql } from "../../db";
 import bcrypt from "bcrypt";
-import type { ILoginInput, IUserDB, IUserInput } from "./auth.interface";
+import type { ILoginInput, IUser, IUserDB, IUserInput } from "./auth.interface";
 
 const createUser = async (user: IUserInput) => {
   const { name, email, role, password } = user;
@@ -11,7 +11,7 @@ const createUser = async (user: IUserInput) => {
   RETURNING id, name, email, role, created_at, updated_at
   `;
 
-  return result[0] as Omit<IUserDB, "password"> | undefined;
+  return result[0] as IUser | undefined;
 };
 const validateUser = async (payload: ILoginInput) => {
   const { email, password } = payload;

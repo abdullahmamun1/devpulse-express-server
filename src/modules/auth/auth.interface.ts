@@ -12,6 +12,8 @@ export interface IUserDB {
   updated_at: Date;
 }
 
+export type IUser = Omit<IUserDB, "password">;
+
 export type IUserInput = Pick<IUserDB, "name" | "email" | "password"> & {
   role?: Role;
 };
